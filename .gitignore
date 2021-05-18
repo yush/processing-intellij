@@ -1,1 +1,5 @@
 out
+/target/classes/
+*.jar
+*.svg
+/.idea
