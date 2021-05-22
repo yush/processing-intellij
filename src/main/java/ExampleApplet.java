@@ -1,57 +1,104 @@
 import processing.core.*;
-import processing.svg.*;
+import java.util.*;
+import processing.dxf.*;
+import java.util.Calendar;
 
 public class ExampleApplet extends PApplet {
-    boolean record;
+    // --------------------------------------------------
+    int dim = 740;
+    int res = 3;
+    float radius=0;
+    PGraphics pg;
+    PGraphics composition;
+
     public static void main(String args[]) {
         PApplet.main("ExampleApplet");
     }
 
+/*
+Processing + Axidraw — Generative hut tutorial by Julien "v3ga" Gachadoat
+January 2020
+www.generativehut.com
+—
+www.instagram.com/julienv3ga
+https://twitter.com/v3ga
+https://github.com/v3ga
+*/
+
+    boolean bExportSVG = false;
+
     @Override
     public void settings() {
-        size(200, 200, P2D);
+        size(800, 800, P2D);
     }
 
     @Override
-    public void setup() {
-        clear();
+    public void setup()
+    {
     }
 
     @Override
-    public void draw() {
-        if (record) {
-            beginRaw(SVG, "output.svg");
+    public void draw()
+    {
+        background(255);
+        if (bExportSVG)
+        {
+            //beginRaw(DXF, "data/exports/dxf/export_"+timestamp()+".dxf");
+            beginRecord(SVG, "data/exports/svg/export_"+timestamp()+".svg");
         }
 
-        // Do all your drawing here
-        hexagon(50, 50, 50);
+        // Drawing options : no fill and stroke set to black
+        noFill();
+        stroke(0);
 
-        if (record) {
-            endRaw();
-            record = false;
+        // Start drawing here
+
+        int SIZE = 50;
+        int COL_COUNT = 3;
+        int ROW_COUNT = 3;
+        float heightPad = sin(PI/3) * SIZE;
+        for (int xGrid = 1; xGrid <= COL_COUNT; xGrid++) {
+            for(int yGrid = 1; yGrid <= ROW_COUNT; yGrid++) {
+                pushMatrix();
+                translate(xGrid * (SIZE * 2), yGrid * (heightPad * 2));
+                hexagon(0, 0, SIZE);
+                popMatrix();
+            }
+        }
+
+        // End drawing here
+
+        // If we were exporting, then we stop recording and set the flag to false
+        if (bExportSVG)
+        {
+            endRecord();
+            //endRaw();
+            bExportSVG = false;
         }
     }
 
-    void hexagon(float x, float y, float radius) {
-        polygon(x, y, radius, 6);
+    @Override
+    public void keyPressed()
+    {
+        if (key == 'e')
+        {
+            bExportSVG = true;
+        }
     }
 
-    void polygon(float x, float y, float radius, int npoints) {
-        float angle = TWO_PI / npoints;
+    String timestamp()
+    {
+        Calendar now = Calendar.getInstance();
+        return String.format("%1$ty%1$tm%1$td_%1$tH%1$tM%1$tS", now);
+    }
+
+    public void hexagon(int x, int y, int size) {
         beginShape();
-        for (float a = 0; a < TWO_PI; a += angle) {
-            float sx = x + cos(a) * radius;
-            float sy = y + sin(a) * radius;
-            vertex(sx, sy);
+        for (float theta = 0; theta < TWO_PI; theta+=PI/3 ) {
+            float xVertex = cos(theta);
+            float yVertex = sin(theta);
+            vertex(xVertex * size, yVertex * size);
         }
         endShape(CLOSE);
-    }
-
-    // Hit 'r' to record a single frame
-    @Override
-    public void keyPressed() {
-        if (key == 'r') {
-            record = true;
-        }
     }
 }
