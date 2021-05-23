@@ -1,31 +1,10 @@
 import processing.core.*;
-import java.util.*;
-import processing.dxf.*;
-import java.util.Calendar;
 
-public class ExampleApplet extends PApplet {
+public class Hexagon1 extends PAppletSvgExport {
     // --------------------------------------------------
-    int dim = 740;
-    int res = 3;
-    float radius=0;
-    PGraphics pg;
-    PGraphics composition;
-
     public static void main(String args[]) {
-        PApplet.main("ExampleApplet");
+        PApplet.main("Hexagon1");
     }
-
-/*
-Processing + Axidraw — Generative hut tutorial by Julien "v3ga" Gachadoat
-January 2020
-www.generativehut.com
-—
-www.instagram.com/julienv3ga
-https://twitter.com/v3ga
-https://github.com/v3ga
-*/
-
-    boolean bExportSVG = false;
 
     @Override
     public void settings() {
@@ -40,19 +19,10 @@ https://github.com/v3ga
     @Override
     public void draw()
     {
-        background(255);
-        if (bExportSVG)
-        {
-            //beginRaw(DXF, "data/exports/dxf/export_"+timestamp()+".dxf");
-            beginRecord(SVG, "data/exports/svg/export_"+timestamp()+".svg");
-        }
-
-        // Drawing options : no fill and stroke set to black
-        noFill();
+        super.beforeDraw();
         stroke(0);
 
         // Start drawing here
-
         int SIZE = 50;
         int COL_COUNT = 3;
         int ROW_COUNT = 3;
@@ -69,27 +39,13 @@ https://github.com/v3ga
         // End drawing here
 
         // If we were exporting, then we stop recording and set the flag to false
-        if (bExportSVG)
-        {
-            endRecord();
-            //endRaw();
-            bExportSVG = false;
-        }
+        super.afterDraw();
     }
 
     @Override
     public void keyPressed()
     {
-        if (key == 'e')
-        {
-            bExportSVG = true;
-        }
-    }
-
-    String timestamp()
-    {
-        Calendar now = Calendar.getInstance();
-        return String.format("%1$ty%1$tm%1$td_%1$tH%1$tM%1$tS", now);
+        super.keyPressed();
     }
 
     public void hexagon(int x, int y, int size) {
