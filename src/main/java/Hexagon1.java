@@ -23,23 +23,27 @@ public class Hexagon1 extends PAppletSvgExport {
         stroke(0);
 
         // Start drawing here
+        hexagonGrid1();
+        super.afterDraw();
+    }
+
+    private void hexagonGrid1() {
         int SIZE = 50;
         int COL_COUNT = 3;
-        int ROW_COUNT = 3;
+        int ROW_COUNT = 6;
         float heightPad = sin(PI/3) * SIZE;
         for (int xGrid = 1; xGrid <= COL_COUNT; xGrid++) {
             for(int yGrid = 1; yGrid <= ROW_COUNT; yGrid++) {
                 pushMatrix();
-                translate(xGrid * (SIZE * 2), yGrid * (heightPad * 2));
+                if (yGrid % 2 == 1) {
+                    translate(xGrid * (SIZE *3), yGrid * (heightPad));
+                } else {
+                    translate(xGrid * (SIZE *3) + (SIZE+SIZE/2) , yGrid * (heightPad));
+                }
                 hexagon(0, 0, SIZE);
                 popMatrix();
             }
         }
-
-        // End drawing here
-
-        // If we were exporting, then we stop recording and set the flag to false
-        super.afterDraw();
     }
 
     @Override
