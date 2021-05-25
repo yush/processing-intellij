@@ -12,11 +12,6 @@ public class Hexagon1 extends PAppletSvgExport {
     }
 
     @Override
-    public void setup()
-    {
-    }
-
-    @Override
     public void draw()
     {
         super.beforeDraw();
@@ -44,12 +39,6 @@ public class Hexagon1 extends PAppletSvgExport {
                 popMatrix();
             }
         }
-    }
-
-    @Override
-    public void keyPressed()
-    {
-        super.keyPressed();
     }
 
     public void hexagon(int x, int y, int size) {
